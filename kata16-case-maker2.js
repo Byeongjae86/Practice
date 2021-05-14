@@ -31,7 +31,7 @@ const makeCase = function(input, type) {
 
   for (aType of typesInArray) {
     switch (aType) {
-      case 'camel': output = camelCase(); break;
+      case 'camel': output = camelCse(); break;
       case 'pascal': output = pascalCase(); break;
       case 'snake': output = snakeCase(); break;
       case 'kebab': output = kebabCase(); break;
