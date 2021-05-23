@@ -9,26 +9,38 @@ Precedence of each of the casing styles are as follows, values higher in the lis
 Our function should be able to handle all of these cases.
 For more information on casing styles, read Wikipedia's Special Case Styles for a list of various casing examples.*/
 
-const makeCase = function(input, type) {
-  
-  let initialInput = input.toLowerCase()
-  let output = initialInput;
-  
-  const typesInArray = [];  
-  (Array.isArray(type)) ? type.forEach(type => typesInArray.push(type)) : typesInArray.push(type);
+const VOWELS = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']; // any constant that are globally true, can be defined at the very top of the program right after the imports. Use Uppercases for variable name
+const SORTED_TYPES_ALL = [ 'consonant', 'camel', 'pascal', 'snake', 'kebab', 'title', 'vowel','upper', 'lower'] 
 
-  const vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'];
+const makeCase = function(input, type) { // Looks like type receives an array, then it should be types instead of type
   
-  const camelCase = () => initialInput.split(' ').map((word, index) => (index > 0) ? `${word[0].toUpperCase()}${word.slice(1)}` : word).join('');
-  const pascalCase = () => initialInput.split(' ').map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join('');
-  const snakeCase = () => initialInput.split(' ').map((word, index, array) => (index < array.length-1) ? word + '_' : word).join('');
-  const kebabCase = () => initialInput.split(' ').map((word, index, array) => (index < array.length-1) ? word + '-' : word).join('');
-  const titleCase = () => initialInput.split(' ').map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join(' ');
-  const vowelCase = () => output.split('').map(character => (vowels.includes(character)) ? character.toUpperCase(): character).join('');
-  const consonantCase = () => output.toUpperCase().split('').map(character => (vowels.includes(character)) ? character.toLowerCase(): character).join('');
-  const upperCase = () => output.toUpperCase();
-  const lowerCase = () => output.toLowerCase();
+  let inputLower = input.toLowerCase()
+  // if type is already a array, why are we doing this?
+  // I am assuming that you are doing this because the argument type can be either string(containing a single value) or an array (containing multiple values)
+  // When you desing a function, it is not the best practice to receive an argument that can be something or something else (like string or array).
+  // the reason is because it makes functions to handle many different scenarios and it causes the function to be more complicated => more bugs and harder to maintain
+  // You should decide if you want to receive type as string or array.
+  const types = [];  
+  (Array.isArray(type)) ? type.forEach(type => types.push(type)) : types.push(type)
+  // const typesInArray = (Array.isArray(type)) ? type : type.split(' ')
 
+  sortedTypes = []
+  
+  types.forEach((type) => {
+    if(!SORTED_TYPES_ALL.includes(type)) {
+      console.error(`Error: Invalid type input, input: ${type}, skipping the conversion for this type`)
+    }
+  })
+
+
+  
+  for(type of SORTED_TYPES_ALL) {
+    for(inputType of types) {
+      if(type === inputType) {
+        sortedTypes.push(inputType)
+      }
+
+      
   for (aType of typesInArray) {
     switch (aType) {
       case 'camel': output = camelCse(); break;
@@ -40,19 +52,46 @@ const makeCase = function(input, type) {
       case 'consonant': output = consonantCase(); break;
       case 'upper': output = upperCase(); break;
       case 'lower': output = lowerCase(); break;
+
     }
   }
-    //firstClassTypes should be entered at index of 0, and SecondClassTypes come after.
-    const firstClassTypes = ['camel', 'pascal', 'snake', 'kebab', 'title'];
-    const secondClassTypes = ['vowel', 'consonant', 'upper', 'lower' ];
-    const allClasses = firstClassTypes.concat(secondClassTypes);
-    typesInArray.length === 1 && !allClasses.includes(typesInArray[0])  ? output = 'undefined' : null;
-    typesInArray.length === 2 && (!allClasses.includes(typesInArray[0]) || !allClasses.includes(typesInArray[1])) ? output = 'undefined' : null;
-    typesInArray.length === 2 && secondClassTypes.includes(typesInArray[0]) ? output = `${typesInArray[0]}type has to be the second type` : null;
-    typesInArray.length === 2 && firstClassTypes.includes(typesInArray[1]) ? output = `${typesInArray[1]}type has to be the first type` : null;
-    typesInArray.length > 2 || typesInArray.length < 1 ? output = `type should be entered at least 1, and the limit 2!!` : null;
 
-  return output;
+  // below is functions and functions without input? I am confused
+  // I see why you created duplicated called `output`. I would encourage you to make below functions to receive inputs instead of directly accessing the exsiting variables.
+  const camelCase = (input) => {
+    const result = input.split(' ').map((word, index) => (index > 0) ? `${word[0].toUpperCase()}${word.slice(1)}` : word).join('');
+    return result
+  }
+  const pascalCase = (input) => input.split(' ').map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join('');
+  const snakeCase = (input) => input.split(' ').map((word, index, array) => (index < array.length-1) ? word + '_' : word).join('');
+  const kebabCase = (input) => input.split(' ').map((word, index, array) => (index < array.length-1) ? word + '-' : word).join('');
+  const titleCase = (input) => input.split(' ').map(word => `${word[0].toUpperCase()}${word.slice(1)}`).join(' ');
+  const vowelCase = (input) => input.split('').map(character => (VOWELS.includes(character)) ? character.toUpperCase(): character).join('');
+  const consonantCase = (input) => {
+    // problem here
+    const result = input.toUpperCase().split('').map(character => (VOWELS.includes(character)) ? character.toLowerCase(): character).join('');
+    return result
+  }
+  const upperCase = (input) => input.toUpperCase();
+  const lowerCase = (input) => input.toLowerCase();
+
+  for (aType of sortedTypes) {
+    switch (aType) {
+      case 'camel': inputLower = camelCase(inputLower); break;
+      case 'pascal': inputLower = pascalCase(inputLower); break;
+      case 'snake': inputLower = snakeCase(inputLower); break;
+      case 'kebab': inputLower = kebabCase(inputLower); break;
+      case 'title': inputLower = titleCase(inputLower); break;
+      case 'vowel': inputLower = vowelCase(inputLower); break;
+      case 'consonant': inputLower = consonantCase(inputLower); break;
+      case 'upper': inputLower = upperCase(inputLower); break;
+      case 'lower': inputLower = lowerCase(inputLower); break; 
+      // missing a default case
+      // also in this case, the output will only have the latest conversion result.
+      // e.g. if there are multiple types passed, [camel, upper], then at the end the output will have upper conversion only. camel case conversion will be lost.
+    }
+  }
+  return inputLower;
 }
 
   console.log(makeCase("this is a string", "camel"));
