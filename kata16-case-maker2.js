@@ -32,11 +32,27 @@ const makeCase = function(input, type) { // Looks like type receives an array, t
     }
   })
 
+
+  
   for(type of SORTED_TYPES_ALL) {
     for(inputType of types) {
       if(type === inputType) {
         sortedTypes.push(inputType)
       }
+
+      
+  for (aType of typesInArray) {
+    switch (aType) {
+      case 'camel': output = camelCse(); break;
+      case 'pascal': output = pascalCase(); break;
+      case 'snake': output = snakeCase(); break;
+      case 'kebab': output = kebabCase(); break;
+      case 'title': output = titleCase(); break;
+      case 'vowel': output = vowelCase(); break;
+      case 'consonant': output = consonantCase(); break;
+      case 'upper': output = upperCase(); break;
+      case 'lower': output = lowerCase(); break;
+
     }
   }
 
